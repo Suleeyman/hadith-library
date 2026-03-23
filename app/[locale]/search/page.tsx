@@ -38,7 +38,7 @@ export default async function SearchPage(props: PageProps<"/[locale]/search">) {
         <Breadcrumbs crumbs={BREADCRUMB} />
         <section className="space-y-10">
           <div className="space-y-4">
-            <PageHeader title={t.searchPlaceholder} subtitle="TEST" />
+            <PageHeader title={t.searchPlaceholder} />
           </div>
         </section>
       </>

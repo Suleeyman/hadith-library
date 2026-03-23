@@ -11,7 +11,7 @@ export default function Footer({ locale }: Props) {
 
   return (
     <footer className="py-6 border-t border-border/70 bg-card/70">
-      <FlexContainer>
+      <FlexContainer wrap={true}>
         <span data-ui-font>{t.appName}</span>
         <span>
           Data served from the
