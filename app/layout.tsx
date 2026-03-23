@@ -1,3 +1,4 @@
+import { defaultLocale } from '@/lib/i18n'
 import type { Metadata } from 'next'
 import {
   Manrope,
@@ -5,7 +6,6 @@ import {
   Source_Serif_4,
 } from 'next/font/google'
 import './globals.css'
-import { defaultLocale } from '@/lib/i18n'
 
 const serif = Source_Serif_4({
   variable: '--font-serif',
@@ -42,6 +42,7 @@ export default function RootLayout({
     <html
       lang={defaultLocale}
       className={`${serif.variable} ${ui.variable} ${arabic.variable} h-full antialiased`}
+      data-theme="winter"
     >
       <body className="min-h-full">{children}</body>
     </html>

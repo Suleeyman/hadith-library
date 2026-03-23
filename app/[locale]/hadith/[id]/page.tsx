@@ -1,5 +1,10 @@
+import ArabicToggle from '@/components/hadith/ArabicToggle'
+import HadithMeta from '@/components/hadith/HadithMeta'
+import HadithText from '@/components/hadith/HadithText'
+import PageHeader from '@/components/ui/PageHeader'
 import { ApiError, getBook, getEditions, getHadith } from '@/lib/api'
 import { getLocalizedText, getUiStrings, isLocale, locales } from '@/lib/i18n'
+import { parseArabicDiacritics } from '@/lib/query'
 import { getSiteUrl } from '@/lib/site'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
@@ -21,7 +26,10 @@ export async function generateMetadata(
   if (!isLocale(locale)) notFound()
 
   try {
-    const hadith = await getHadith(id, { lang: locale })
+    const hadith = await getHadith(id, {
+      lang: locale,
+      arabic_diacritics: 'exclude',
+    })
     const text = getLocalizedText(hadith.text, locale)
     const title = truncate(text || 'Hadith', 90)
     const description = truncate(text || '', DESCRIPTION_LENGTH)
@@ -53,10 +61,15 @@ export default async function HadithPage(
   if (!isLocale(locale)) notFound()
 
   const t = getUiStrings(locale)
+  const searchParams = await props.searchParams
+  const arabic = parseArabicDiacritics(searchParams?.arabic_diacritics)
 
   let hadith
   try {
-    hadith = await getHadith(id, { lang: locale })
+    hadith = await getHadith(id, {
+      lang: locale,
+      arabic_diacritics: arabic.param,
+    })
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) notFound()
     throw error
@@ -73,81 +86,23 @@ export default async function HadithPage(
     }
   }
 
-  const localizedText = getLocalizedText(hadith.text, locale)
-  const arabicText = locale === 'ar' ? null : hadith.text?.ar
   const indexLabel = `#${hadith.hadithIndex}${
     hadith.hadithIndexMinor ? `.${hadith.hadithIndexMinor}` : ''
   }`
+  const editionLabel = edition
+    ? getLocalizedText(edition.name, locale)
+    : hadith.editionId
+  const bookLabel = book
+    ? getLocalizedText(book.name, locale)
+    : `${t.bookLabel} ${hadith.bookIndex}`
+  const subtitle = `${editionLabel} - ${bookLabel}`
 
   return (
     <article className="space-y-10">
-      <header className="space-y-3">
-        <p className="text-xs uppercase tracking-[0.35em] text-amber-700">{t.hadithsTitle}</p>
-        <h1 className="text-3xl font-semibold text-slate-900">{indexLabel}</h1>
-        <p className="text-sm text-slate-600">
-          {edition ? getLocalizedText(edition.name, locale) : hadith.editionId} -{' '}
-          {book ? getLocalizedText(book.name, locale) : `Book ${hadith.bookIndex}`}
-        </p>
-      </header>
-
-      <section className="rounded-3xl border border-slate-200/70 bg-white/80 p-8 shadow-sm shadow-slate-200/50">
-        {arabicText ? (
-          <p
-            className="text-arabic text-2xl leading-relaxed text-slate-900"
-            dir="rtl"
-            lang="ar"
-          >
-            {arabicText}
-          </p>
-        ) : null}
-        <p className="mt-6 text-lg leading-relaxed text-slate-900">
-          {localizedText}
-        </p>
-      </section>
-
-      <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-        <div className="rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-sm shadow-slate-200/50">
-          <h2 className="text-sm uppercase tracking-[0.3em] text-slate-500">Metadata</h2>
-          <dl className="mt-4 space-y-3 text-sm text-slate-700">
-            <div className="flex items-center justify-between">
-              <dt>Edition</dt>
-              <dd className="font-semibold text-slate-900">
-                {edition ? getLocalizedText(edition.name, locale) : hadith.editionId}
-              </dd>
-            </div>
-            <div className="flex items-center justify-between">
-              <dt>Book</dt>
-              <dd className="font-semibold text-slate-900">
-                {book ? getLocalizedText(book.name, locale) : hadith.bookIndex}
-              </dd>
-            </div>
-            <div className="flex items-center justify-between">
-              <dt>Hadith Index</dt>
-              <dd className="font-semibold text-slate-900">{indexLabel}</dd>
-            </div>
-            <div className="flex items-center justify-between">
-              <dt>Book Index</dt>
-              <dd className="font-semibold text-slate-900">{hadith.bookHadithIndex}</dd>
-            </div>
-          </dl>
-        </div>
-
-        <div className="rounded-3xl border border-slate-200/70 bg-white/80 p-6 shadow-sm shadow-slate-200/50">
-          <h2 className="text-sm uppercase tracking-[0.3em] text-slate-500">{t.gradesTitle}</h2>
-          <ul className="mt-4 space-y-3 text-sm text-slate-700">
-            {hadith.grades.length === 0 ? (
-              <li className="text-slate-500">-</li>
-            ) : (
-              hadith.grades.map((grade, index) => (
-                <li key={`${grade.name}-${index}`} className="flex justify-between">
-                  <span className="font-semibold text-slate-900">{grade.name}</span>
-                  <span>{grade.grade}</span>
-                </li>
-              ))
-            )}
-          </ul>
-        </div>
-      </section>
+      <PageHeader eyebrow={t.hadithsTitle} title={indexLabel} subtitle={subtitle} />
+      <ArabicToggle enabled={arabic.enabled} />
+      <HadithText locale={locale} text={hadith.text} showArabic={arabic.enabled} />
+      <HadithMeta locale={locale} hadith={hadith} edition={edition} book={book} />
     </article>
   )
 }

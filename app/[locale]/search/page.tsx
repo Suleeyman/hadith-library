@@ -1,80 +1,101 @@
-import { notFound } from 'next/navigation'
-import { ApiError, searchHadiths } from '@/lib/api'
-import { getUiStrings, isLocale } from '@/lib/i18n'
-import HadithCard from '@/components/HadithCard'
-import Pagination from '@/components/Pagination'
-import SearchInput from '@/components/SearchInput'
+import Breadcrumbs, { Breadcrumb } from "@/components/layout/Breadcrumbs";
+import HadithList from "@/components/sections/HadithList";
+import PageHeader from "@/components/ui/PageHeader";
+import Pagination from "@/components/ui/Pagination";
+import { ApiError, HadithSearchItem, PaginatedResponse, searchHadiths } from "@/lib/api";
+import { getUiStrings, isLocale } from "@/lib/i18n";
+import { parseArabicDiacritics, parsePage, parseQuery } from "@/lib/query";
+import { notFound } from "next/navigation";
 
-const PAGE_SIZE = 10
+const PAGE_SIZE = 10;
+const BREADCRUMB: Breadcrumb = [
+  {
+    label: "Home",
+    href: "/",
+  },
+  {
+    label: "Search",
+    href: "",
+  },
+];
 
-export const revalidate = 3600
+export const revalidate = 3600;
 
-function parsePage(value: unknown) {
-  if (typeof value !== 'string') return 1
-  const parsed = Number.parseInt(value, 10)
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : 1
-}
+export default async function SearchPage(props: PageProps<"/[locale]/search">) {
+  const { locale } = await props.params;
 
-function parseQuery(value: unknown) {
-  if (typeof value !== 'string') return ''
-  return value.trim()
-}
+  if (!isLocale(locale)) notFound();
 
-export default async function SearchPage(
-  props: PageProps<'/[locale]/search'>
-) {
-  const { locale } = await props.params
+  const t = getUiStrings(locale);
+  const searchParams = await props.searchParams;
+  const query = parseQuery(searchParams?.q);
+  const page = parsePage(searchParams?.page);
+  const arabic = parseArabicDiacritics(searchParams?.arabic_diacritics);
 
-  if (!isLocale(locale)) notFound()
-
-  const t = getUiStrings(locale)
-  const searchParams = await props.searchParams
-  const query = parseQuery(searchParams?.q)
-  const page = parsePage(searchParams?.page)
-
-  let results
-  if (query) {
-    try {
-      results = await searchHadiths(query, {
-        lang: locale,
-        page,
-        page_size: PAGE_SIZE,
-      })
-    } catch (error) {
-      if (error instanceof ApiError && error.status === 404) notFound()
-      throw error
-    }
+  if (!query) {
+    return (
+      <>
+        <Breadcrumbs crumbs={BREADCRUMB} />
+        <section className="space-y-10">
+          <div className="space-y-4">
+            <PageHeader title={t.searchPlaceholder} subtitle="TEST" />
+          </div>
+        </section>
+      </>
+    );
   }
 
-  return (
-    <section className="space-y-10">
-      <header className="space-y-4">
-        <p className="text-xs uppercase tracking-[0.35em] text-amber-700">{t.searchButton}</p>
-        <SearchInput locale={locale} action={`/${locale}/search`} defaultValue={query} />
-      </header>
+  let results!: PaginatedResponse<HadithSearchItem>;
+  try {
+    results = await searchHadiths(query, {
+      lang: locale,
+      page,
+      page_size: PAGE_SIZE,
+      arabic_diacritics: arabic.param,
+    });
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 404) notFound();
+    throw error;
+  }
 
-      {!query ? (
-        <p className="text-sm text-slate-600">{t.searchPrompt}</p>
-      ) : results && results.items.length === 0 ? (
-        <p className="text-sm text-slate-600">{t.noResults}</p>
-      ) : (
-        <div className="space-y-6">
-          <div className="grid gap-6">
-            {results?.items.map((hadith) => (
-              <HadithCard key={hadith._id} hadith={hadith} locale={locale} />
-            ))}
-          </div>
-          {results ? (
-            <Pagination
-              page={results.page}
-              pageSize={results.page_size}
-              total={results.total}
-              basePath={`/${locale}/search`}
-              query={{ q: query }}
-            />
-          ) : null}
+  const subtitle = (results.total === 100 ? "100+" : results.total.toString()) + " — " + query;
+
+  return (
+    <>
+      <Breadcrumbs crumbs={BREADCRUMB} />
+      <section className="space-y-10">
+        <div className="space-y-4">
+          <PageHeader title={t.searchPlaceholder} subtitle={subtitle} />
         </div>
-      )}
-    </section>
-  )
+
+        {!query ? (
+          <p className="text-sm text-muted-foreground">{t.searchPrompt}</p>
+        ) : results && results.items.length === 0 ? (
+          <p className="text-sm text-muted-foreground">{t.noResults}</p>
+        ) : (
+          <div className="space-y-6">
+            {results ? (
+              <HadithList
+                items={results.items}
+                locale={locale}
+                showArabic={arabic.enabled}
+              />
+            ) : null}
+            {results ? (
+              <Pagination
+                page={results.page}
+                pageSize={results.page_size}
+                total={results.total}
+                basePath={`/${locale}/search`}
+                query={{
+                  q: query,
+                  arabic_diacritics: arabic.enabled ? "include" : undefined,
+                }}
+              />
+            ) : null}
+          </div>
+        )}
+      </section>
+    </>
+  );
 }
