@@ -1,36 +1,108 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Hadith Library
+
+A multilingual, reading-first Hadith browser built with Next.js App Router. It presents editions, books, and individual hadiths, with fast search and Arabic diacritics support.
+
+## Features
+
+- Editions overview with book and hadith counts
+- Book-level browsing per edition
+- Hadith detail pages with grading metadata
+- Full-text search with pagination
+- Arabic diacritics toggle
+- Multi-language UI and content with RTL support
+
+## Tech Stack
+
+- Next.js App Router
+- React 19
+- Tailwind CSS v4 + daisyUI
+- TypeScript
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Bun (recommended)
+- Node.js 20+
+
+### Environment
+
+Create a `.env` file with the following values:
+
+```
+API_BASE_URL=https://www.hadislam.org
+SITE_URL=http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+If you need these values available in the browser, use the `NEXT_PUBLIC_` prefix:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+NEXT_PUBLIC_API_BASE_URL=https://www.hadislam.org
+NEXT_PUBLIC_SITE_URL=http://localhost:3000
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Install
 
-## Learn More
+```
+bun install
+```
 
-To learn more about Next.js, take a look at the following resources:
+### Run
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+bun run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Open `http://localhost:3000`.
 
-## Deploy on Vercel
+## Scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `bun run dev`: Start the dev server
+- `bun run build`: Production build
+- `bun run start`: Start the production server
+- `bun run lint`: Lint
+- `bun run tcheck`: Type check
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Project Structure
+
+- `app/`: App Router routes, layouts, metadata, and route handlers
+- `components/`: UI, layout, and section components
+- `lib/`: API client, i18n, and utilities
+- `public/`: Static assets
+
+## Internationalization
+
+Supported locales: `en`, `fr`, `ar`, `ru`, `id`, `tr`, `ur`, `bn`, `ta`.
+
+RTL languages are handled automatically for `ar` and `ur`.
+
+## API Notes
+
+The app expects [hadislam.org](https://github.com/Suleeyman/hadislam.org) API.
+
+Set `API_BASE_URL` to the API origin to enable server-side fetching.
+
+## Deployment
+
+You can deploy to any platform that supports Next.js. Make sure to set `API_BASE_URL` and `SITE_URL` in your environment.
+
+
+## 📜 License
+
+This project is licensed under the MIT License. See `LICENSE`.
+
+## 💬 Feedback
+
+Have suggestions, feedback, or need support? Open an issue or start a discussion — we’d love to hear from you.
+
+## 🤝 Contributing
+
+We welcome all kinds of contributions! Here's how you can help :
+
+**✅ Improve the Application**
+
+_to be written_
+
+**♥️ Financial support**
+
+If you want to support me financially you can [buy me a coffee](https://ko-fi.com/ysuleyman) it will certainly motivate me on continously improving the Web Application. May Allah rewards you !

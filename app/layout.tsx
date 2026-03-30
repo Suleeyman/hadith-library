@@ -1,4 +1,5 @@
 import { defaultLocale } from '@/lib/i18n'
+import { Analytics } from '@vercel/analytics/next'
 import type { Metadata } from 'next'
 import {
   Manrope,
@@ -44,7 +45,10 @@ export default function RootLayout({
       className={`${serif.variable} ${ui.variable} ${arabic.variable} h-full antialiased`}
       data-theme="winter"
     >
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        {children}
+        <Analytics />
+      </body>
     </html>
   )
 }
