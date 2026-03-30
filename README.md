@@ -25,22 +25,6 @@ A multilingual, reading-first Hadith browser built with Next.js App Router. It p
 - Bun (recommended)
 - Node.js 20+
 
-### Environment
-
-Create a `.env` file with the following values:
-
-```
-API_BASE_URL=https://www.hadislam.org
-SITE_URL=http://localhost:3000
-```
-
-If you need these values available in the browser, use the `NEXT_PUBLIC_` prefix:
-
-```
-NEXT_PUBLIC_API_BASE_URL=https://www.hadislam.org
-NEXT_PUBLIC_SITE_URL=http://localhost:3000
-```
-
 ### Install
 
 ```
@@ -81,10 +65,6 @@ RTL languages are handled automatically for `ar` and `ur`.
 The app expects [hadislam.org](https://github.com/Suleeyman/hadislam.org) API.
 
 Set `API_BASE_URL` to the API origin to enable server-side fetching.
-
-## Deployment
-
-You can deploy to any platform that supports Next.js. Make sure to set `API_BASE_URL` and `SITE_URL` in your environment.
 
 
 ## 📜 License

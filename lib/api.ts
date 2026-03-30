@@ -88,11 +88,11 @@ export class ApiError extends Error {
   }
 }
 
-const API_BASE_URL = (
-  process.env.NEXT_PUBLIC_API_BASE_URL ||
-  process.env.API_BASE_URL ||
-  ""
-).replace(/\/$/, "");
+// Able to change to localhost if we start the API on local
+const API_BASE_URL =
+  process.env.NODE_ENV === "production"
+    ? "https://www.hadislam.org"
+    : "https://www.hadislam.org";
 
 const REVALIDATE_SECONDS = 3600;
 

@@ -57,7 +57,7 @@ const uiStrings: Record<
     searchPrompt: "Start by entering a search query above.",
   },
   fr: {
-    appName: "Bibliothèque des Hadiths",
+    appName: "Bibliothèque de Hadith",
     appTagline: "Une collection multilingue pour une lecture claire et calme.",
     searchPlaceholder: "Rechercher un hadith, un narrateur, un mot-clé",
     searchButton: "Rechercher",
