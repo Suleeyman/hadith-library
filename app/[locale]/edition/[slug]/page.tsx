@@ -1,8 +1,8 @@
-import { notFound } from 'next/navigation'
-import { ApiError, getEdition } from '@/lib/api'
-import { getLocalizedText, getUiStrings, isLocale } from '@/lib/i18n'
 import BookGrid from '@/components/sections/BookGrid'
 import PageHeader from '@/components/ui/PageHeader'
+import { ApiError, getEdition } from '@/lib/api'
+import { getLocalizedText, getUiStrings, isLocale } from '@/lib/i18n'
+import { notFound } from 'next/navigation'
 
 export const revalidate = 3600
 
@@ -17,7 +17,7 @@ export default async function EditionPage(
 
   let edition
   try {
-    edition = await getEdition(slug)
+    edition = await getEdition(slug, locale)
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) notFound()
     throw error
@@ -33,7 +33,7 @@ export default async function EditionPage(
         books={edition.books}
         locale={locale}
         slug={edition.slug}
-        booksLabel={t.booksTitle}
+        booksLabel={t.bookLabel}
         hadithsLabel={t.hadithsTitle}
       />
     </section>

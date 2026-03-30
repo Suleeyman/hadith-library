@@ -29,7 +29,7 @@ export default async function BookPage(
   let book
   let hadiths
   try {
-    book = await getBook(slug, index)
+    book = await getBook(slug, index, locale)
     hadiths = await getHadithsByBook(slug, index, {
       lang: locale,
       page,

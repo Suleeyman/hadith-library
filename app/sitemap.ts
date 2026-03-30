@@ -26,13 +26,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let editions;
   try {
-    editions = await getEditions();
+    editions = await getEditions("*");
   } catch {
     return entries;
   }
 
   for (const edition of editions) {
-    for (const locale of locales) {
+    const availableLanguages = Object.values(edition.availableLanguages);
+
+    for (const locale of availableLanguages) {
       entries.push({
         url: `${siteUrl}/${locale}/edition/${edition.slug}`,
         lastModified,
@@ -43,13 +45,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     let books;
     try {
-      books = await getBooksByEdition(edition.slug);
+      books = await getBooksByEdition(edition.slug, "*");
     } catch {
       continue;
     }
 
     for (const book of books) {
-      for (const locale of locales) {
+      for (const locale of availableLanguages) {
         entries.push({
           url: `${siteUrl}/${locale}/book/${edition.slug}/${book.bookIndex}`,
           lastModified,

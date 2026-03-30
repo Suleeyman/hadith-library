@@ -75,13 +75,14 @@ export default async function HadithPage(
     throw error
   }
 
-  const editions = await getEditions()
+  const editions = await getEditions(locale, locale)
   const edition = editions.find((item) => item._id === hadith.editionId)
   let book = null
   if (edition) {
     try {
-      book = await getBook(edition.slug, hadith.bookIndex)
-    } catch {
+      book = await getBook(edition.slug, hadith.bookIndex, locale)
+    } catch (e: unknown){
+      console.log("error?", e)
       book = null
     }
   }

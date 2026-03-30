@@ -3,7 +3,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   /* config options here */
   compiler: {
-    removeConsole: false, // ❗️❗️❗️❗️❗️ this removes the logging!
+    removeConsole: true, // ❗️❗️❗️❗️❗️ this removes the logging!
   },
 };
 

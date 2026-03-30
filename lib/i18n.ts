@@ -1,3 +1,5 @@
+import { Language } from "./api";
+
 export const locales = [
   "en",
   "fr",
@@ -174,17 +176,12 @@ export function getUiStrings(locale: Locale) {
 }
 
 export function getLocalizedText(
-  text: Record<string, string> | null | undefined,
+  text: Partial<Record<Language, string>> | null | undefined,
   locale: Locale,
 ) {
   if (!text) return "";
   if (text[locale]) return text[locale];
   if (text[defaultLocale]) return text[defaultLocale];
   const first = Object.values(text)[0];
-  return first ?? "";
-}
-
-export function localeToApiLang(locale: Locale) {
-  // OpenAPI enum does not include 'ru'; fall back to English if needed.
-  return locale === "ru" ? "en" : locale;
+  return first ?? "———";
 }

@@ -1,8 +1,8 @@
-import { notFound } from 'next/navigation'
-import { getEditions } from '@/lib/api'
-import { getUiStrings, isLocale } from '@/lib/i18n'
 import EditionGrid from '@/components/sections/EditionGrid'
 import PageHeader from '@/components/ui/PageHeader'
+import { getEditions } from '@/lib/api'
+import { getUiStrings, isLocale } from '@/lib/i18n'
+import { notFound } from 'next/navigation'
 
 export const revalidate = 3600
 
@@ -12,7 +12,7 @@ export default async function HomePage(props: PageProps<'/[locale]'>) {
   if (!isLocale(locale)) notFound()
 
   const t = getUiStrings(locale)
-  const editions = await getEditions()
+  const editions = await getEditions(locale, locale)
 
   return (
     <section className="space-y-10">

@@ -53,6 +53,7 @@ export default async function SearchPage(props: PageProps<"/[locale]/search">) {
       page_size: PAGE_SIZE,
       arabic_diacritics: arabic.param,
     });
+    console.log(results);
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) notFound();
     throw error;

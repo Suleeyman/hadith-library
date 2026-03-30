@@ -7,7 +7,7 @@ type Props = {
 
 export default function FlexContainer({ children, wrap = false }: Props) {
   return (
-    <Container className={`text-xs flex gap-5 justify-between items-center${wrap ? " flex-wrap" : ""}`}>
+    <Container className={`flex gap-5 items-center${wrap ? " flex-wrap justify-center md:justify-between" : "justify-between"}`}>
       {children}
     </Container>
   );
