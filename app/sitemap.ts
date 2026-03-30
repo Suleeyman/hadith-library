@@ -32,7 +32,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   for (const edition of editions) {
-    const availableLanguages = Object.values(edition.availableLanguages);
+    const availableLanguages = Object.values(edition.availableLanguages).filter(
+      (lg) => lg !== "ar-diacritics",
+    );
 
     for (const locale of availableLanguages) {
       entries.push({
