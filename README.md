@@ -81,7 +81,7 @@ We welcome all kinds of contributions! Here's how you can help :
 
 **✅ Improve the Application**
 
-_to be written_
+Push to a feature branch and thereafter create a **pull request** on `main` branch.
 
 **♥️ Financial support**
 

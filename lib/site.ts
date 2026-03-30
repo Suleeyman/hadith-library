@@ -7,7 +7,7 @@ export const SITE_URL =
       ? `https://${VERCEL_PROJECT_PRODUCTION_URL}`
       : VERCEL_URL
         ? `https://${VERCEL_URL}`
-        : "https://hadith-app-eta.vercel.app"
+        : "https://hadithslibrary.vercel.app"
     : "http://localhost:3000";
 
 export function getSiteUrl() {
