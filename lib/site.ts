@@ -1,6 +1,5 @@
-const VERCEL_PROJECT_PRODUCTION_URL =
-  process.env.NEXT_PUBLIC_VERCEL_PROJECT_PRODUCTION_URL;
-const VERCEL_URL = process.env.NEXT_PUBLIC_VERCEL_URL;
+const VERCEL_PROJECT_PRODUCTION_URL = process.env.VERCEL_PROJECT_PRODUCTION_URL;
+const VERCEL_URL = process.env.VERCEL_URL;
 
 export const SITE_URL =
   process.env.NODE_ENV === "production"
@@ -8,7 +7,7 @@ export const SITE_URL =
       ? `https://${VERCEL_PROJECT_PRODUCTION_URL}`
       : VERCEL_URL
         ? `https://${VERCEL_URL}`
-        : "https://hadithslibrary.vercel.app"
+        : "https://www.hadithslibrary.com"
     : "http://localhost:3000";
 
 export function getSiteUrl() {
