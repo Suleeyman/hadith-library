@@ -41,6 +41,15 @@ export default function RootLayout({
       className={`${serif.variable} ${ui.variable} ${arabic.variable} h-full antialiased`}
       data-theme="winter"
     >
+      <head>
+        {process.env.NODE_ENV === "production" && (
+          <script
+            defer
+            src="https://cloud.umami.is/script.js"
+            data-website-id="cda9281c-338f-43df-a55f-1c625290a53f"
+          ></script>
+        )}
+      </head>
       <body className="min-h-full">
         {children}
         {process.env.NODE_ENV === "production" && <Analytics />}
