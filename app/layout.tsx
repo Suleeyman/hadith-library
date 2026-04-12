@@ -2,6 +2,7 @@ import { defaultLocale } from "@/lib/i18n";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { Manrope, Noto_Naskh_Arabic, Source_Serif_4 } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const serif = Source_Serif_4({
@@ -43,11 +44,27 @@ export default function RootLayout({
     >
       <head>
         {process.env.NODE_ENV === "production" && (
-          <script
-            defer
-            src="https://cloud.umami.is/script.js"
-            data-website-id="cda9281c-338f-43df-a55f-1c625290a53f"
-          ></script>
+          <>
+            <script
+              defer
+              src="https://cloud.umami.is/script.js"
+              data-website-id="cda9281c-338f-43df-a55f-1c625290a53f"
+            ></script>
+            <script
+              defer
+              src="https://storage.ko-fi.com/cdn/scripts/overlay-widget.js"
+            ></script>
+            <Script id="pp-script" strategy="afterInteractive">
+              {`
+                kofiWidgetOverlay.draw('ysuleyman', {
+                  'type': 'floating-chat',
+                  'floating-chat.donateButton.text': 'Support me',
+                  'floating-chat.donateButton.background-color': '#00b9fe',
+                  'floating-chat.donateButton.text-color': '#fff'
+                });
+              `}
+            </Script>
+          </>
         )}
       </head>
       <body className="min-h-full">
