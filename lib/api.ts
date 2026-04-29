@@ -62,6 +62,8 @@ export type HadithWithVariants = Hadith & {
 
 export type HadithSearchItem = Hadith & {
   score: number;
+  edition: Edition;
+  book: Book;
 };
 
 export type PaginatedResponse<T> = {
@@ -120,7 +122,6 @@ function buildUrl(path: string, query?: Query) {
 
   if (!query) return url.toString();
   for (const [key, value] of Object.entries(query)) {
-    console.log([key, value]);
     if (value === undefined || value === null) continue;
 
     if (!Array.isArray(value)) {
@@ -140,8 +141,7 @@ function buildUrl(path: string, query?: Query) {
 
 async function fetchJson<T>(path: string, query?: Query) {
   const url = buildUrl(path, query);
-  console.log("I'm going to call with that url : ", url);
-  const response = await fetch(buildUrl(path, query), {
+  const response = await fetch(url, {
     next: { revalidate: REVALIDATE_SECONDS },
   });
 
@@ -208,7 +208,7 @@ export async function getBooksByEdition(slug: string, lang: Locale | "*") {
 
 export async function getBook(slug: string, bookIndex: number, lang: Locale) {
   return fetchJson<BookWithEdition>(`/editions/${slug}/books/${bookIndex}`, {
-    lang: [lang, "en"],
+    lang: [lang, "en", "ar"],
   });
 }
 

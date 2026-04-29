@@ -1,4 +1,4 @@
-# Hadith Library
+# Hadiths Library
 
 A multilingual, reading-first Hadith browser built with Next.js App Router. It presents editions, books, and individual hadiths, with fast search and Arabic diacritics support.
 

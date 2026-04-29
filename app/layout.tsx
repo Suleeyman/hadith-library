@@ -27,7 +27,7 @@ const arabic = Noto_Naskh_Arabic({
 });
 
 export const metadata: Metadata = {
-  title: "Hadith Library",
+  title: "Hadiths Library",
   description: "A multilingual, reading-first hadith experience.",
 };
 

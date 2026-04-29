@@ -16,7 +16,7 @@ export default function HadithMeta({ locale, hadith, edition, book }: Props) {
 
   return (
     <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-      <Card className="p-6">
+      <Card>
         <h2 className="text-sm uppercase tracking-[0.3em] text-muted-foreground">Metadata</h2>
         <dl className="mt-4 space-y-3 text-sm text-muted-foreground">
           <div className="flex items-center justify-between">

@@ -6,7 +6,7 @@ type Props = {
 
 export default function AppContainer({ children }: Props) {
   return (
-    <Container className="text-xs">
+    <Container>
       {children}
     </Container>
   );

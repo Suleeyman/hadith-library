@@ -1,10 +1,8 @@
-import ArabicToggle from '@/components/hadith/ArabicToggle'
 import HadithMeta from '@/components/hadith/HadithMeta'
 import HadithText from '@/components/hadith/HadithText'
 import PageHeader from '@/components/ui/PageHeader'
 import { ApiError, getBook, getEditions, getHadith } from '@/lib/api'
 import { getLocalizedText, getUiStrings, isLocale, locales } from '@/lib/i18n'
-import { parseArabicDiacritics } from '@/lib/query'
 import { getSiteUrl } from '@/lib/site'
 import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
@@ -61,14 +59,12 @@ export default async function HadithPage(
   if (!isLocale(locale)) notFound()
 
   const t = getUiStrings(locale)
-  const searchParams = await props.searchParams
-  const arabic = parseArabicDiacritics(searchParams?.arabic_diacritics)
 
   let hadith
   try {
     hadith = await getHadith(id, {
       lang: locale,
-      arabic_diacritics: arabic.param,
+      arabic: "include"
     })
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) notFound()
@@ -81,8 +77,7 @@ export default async function HadithPage(
   if (edition) {
     try {
       book = await getBook(edition.slug, hadith.bookIndex, locale)
-    } catch (e: unknown){
-      console.log("error?", e)
+    } catch {
       book = null
     }
   }
@@ -101,8 +96,7 @@ export default async function HadithPage(
   return (
     <article className="space-y-10">
       <PageHeader eyebrow={t.hadithsTitle} title={indexLabel} subtitle={subtitle} />
-      <ArabicToggle enabled={arabic.enabled} />
-      <HadithText locale={locale} text={hadith.text} showArabic={arabic.enabled} />
+      <HadithText locale={locale} text={hadith.text} />
       <HadithMeta locale={locale} hadith={hadith} edition={edition} book={book} />
     </article>
   )

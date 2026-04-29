@@ -3,10 +3,10 @@ type Props = {
   className?: string
 }
 
-export default function Card({ children }: Props) {
+export default function Card({ className, children }: Props) {
 
   return (
-    <div className="card card-border bg-base-100 shadow-md">
+    <div className="card card-border bg-base-100 shadow-sm">
       <div className="card-body p-6">{children}</div>
     </div>
   )

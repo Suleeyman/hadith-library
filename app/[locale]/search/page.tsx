@@ -4,7 +4,7 @@ import PageHeader from "@/components/ui/PageHeader";
 import Pagination from "@/components/ui/Pagination";
 import { ApiError, HadithSearchItem, PaginatedResponse, searchHadiths } from "@/lib/api";
 import { getUiStrings, isLocale } from "@/lib/i18n";
-import { parseArabicDiacritics, parsePage, parseQuery } from "@/lib/query";
+import { parsePage, parseQuery } from "@/lib/query";
 import { notFound } from "next/navigation";
 
 const PAGE_SIZE = 10;
@@ -30,7 +30,6 @@ export default async function SearchPage(props: PageProps<"/[locale]/search">) {
   const searchParams = await props.searchParams;
   const query = parseQuery(searchParams?.q);
   const page = parsePage(searchParams?.page);
-  const arabic = parseArabicDiacritics(searchParams?.arabic_diacritics);
 
   if (!query) {
     return (
@@ -51,9 +50,8 @@ export default async function SearchPage(props: PageProps<"/[locale]/search">) {
       lang: locale,
       page,
       page_size: PAGE_SIZE,
-      arabic_diacritics: arabic.param,
+      arabic: "include",
     });
-    console.log(results);
   } catch (error) {
     if (error instanceof ApiError && error.status === 404) notFound();
     throw error;
@@ -79,7 +77,6 @@ export default async function SearchPage(props: PageProps<"/[locale]/search">) {
               <HadithList
                 items={results.items}
                 locale={locale}
-                showArabic={arabic.enabled}
               />
             ) : null}
             {results ? (
@@ -90,7 +87,6 @@ export default async function SearchPage(props: PageProps<"/[locale]/search">) {
                 basePath={`/${locale}/search`}
                 query={{
                   q: query,
-                  arabic_diacritics: arabic.enabled ? "include" : undefined,
                 }}
               />
             ) : null}

@@ -20,6 +20,27 @@ export function isLocale(value: string): value is Locale {
   return (locales as readonly string[]).includes(value);
 }
 
+const numberingSystems: Record<Locale, string> = {
+  en: "latn",
+  fr: "latn",
+  ru: "latn",
+  id: "latn",
+  tr: "latn",
+
+  ar: "arab",
+  ur: "arabext",
+  bn: "beng",
+  ta: "tamldec",
+};
+
+export function formatNumber(n: number, locale: Locale): string {
+  const numberingSystem = numberingSystems[locale] ?? "latn";
+
+  return new Intl.NumberFormat(locale, {
+    numberingSystem,
+  }).format(n);
+}
+
 export function isRtl(locale: string) {
   return rtlLocales.includes(locale as Locale);
 }
@@ -42,7 +63,7 @@ const uiStrings: Record<
   }
 > = {
   en: {
-    appName: "Hadith Library",
+    appName: "Hadiths Library",
     appTagline:
       "A multilingual, reading-first collection of prophetic traditions.",
     searchPlaceholder: "Search hadiths, narrators, or keywords",
