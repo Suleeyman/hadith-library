@@ -8,7 +8,7 @@ function SupportKofi() {
     >
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="https://storage.ko-fi.com/cdn/brandasset/v2/support_me_on_kofi_beige.png"
+        src="https://storage.ko-fi.com/cdn/brandasset/v2/support_me_on_kofi_blue.png"
         alt="Support Me Financially"
         className="h-9 border-0"
       />
