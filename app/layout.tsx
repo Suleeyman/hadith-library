@@ -1,6 +1,5 @@
 import SupportKofi from "@/components/ui/SupportKofi";
 import { defaultLocale } from "@/lib/i18n";
-import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { Manrope, Noto_Naskh_Arabic, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
@@ -58,7 +57,6 @@ export default function RootLayout({
       <body className="min-h-full">
         <SupportKofi />
         {children}
-        {process.env.NODE_ENV === "production" && <Analytics />}
       </body>
     </html>
   );
